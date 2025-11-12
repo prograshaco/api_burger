@@ -1,0 +1,6 @@
+target/
+!target/productos-api-0.0.1-SNAPSHOT.jar
+.git
+.gitignore
+*.md
+.mvn/wrapper/maven-wrapper.jar
