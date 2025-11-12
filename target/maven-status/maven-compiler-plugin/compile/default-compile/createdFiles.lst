@@ -1,0 +1,6 @@
+com\example\productos_api\controller\ProductController.class
+com\example\productos_api\model\Product.class
+com\example\productos_api\ProductosApiApplication.class
+com\example\productos_api\repository\ProductRepository.class
+com\example\productos_api\service\ProductService.class
+com\example\productos_api\config\TursoClient.class
