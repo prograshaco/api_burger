@@ -1,18 +1,39 @@
 package com.example.productos_api.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
 
+@Schema(description = "Modelo de producto del restaurante")
 public class Product {
 
+    @Schema(description = "ID único del producto", example = "550e8400-e29b-41d4-a716-446655440000")
     private String id;
+    
+    @Schema(description = "Nombre del producto", example = "Hamburguesa Clásica", required = true)
     private String name;
+    
+    @Schema(description = "Descripción detallada del producto", example = "Deliciosa hamburguesa con carne de res, lechuga, tomate y queso")
     private String description;
+    
+    @Schema(description = "Precio del producto", example = "12.99", required = true)
     private Double price;
+    
+    @Schema(description = "Categoría del producto", example = "Hamburguesas", required = true)
     private String category;
+    
+    @Schema(description = "URL de la imagen del producto", example = "https://example.com/burger.jpg")
     private String imageUrl;
+    
+    @Schema(description = "Disponibilidad del producto (1=disponible, 0=no disponible)", example = "1")
     private Integer available;
+    
+    @Schema(description = "Fecha de creación del producto")
     private LocalDateTime createdAt;
+    
+    @Schema(description = "Fecha de última actualización del producto")
     private LocalDateTime updatedAt;
+    
+    @Schema(description = "Indica si es una especialidad (1=sí, 0=no)", example = "0")
     private Integer isSpecialty;
 
     public Product() {}
