@@ -13,8 +13,8 @@ import java.util.Date;
 public class JwtTokenProvider {
 
     // En producción, esto debería estar en application.properties y ser mucho más
-    // seguro/largo
-    private static final String JWT_SECRET = "EstaEsUnaClaveSecretaMuySeguraParaFirmarLosTokensJWT1234567890";
+    // seguro/largo. Debe tener al menos 64 caracteres para HS512 (512 bits)
+    private static final String JWT_SECRET = "EstaEsUnaClaveSecretaMuySeguraParaFirmarLosTokensJWT1234567890AbCdEfGhIjKlMnOpQrStUvWxYz";
     private static final long JWT_EXPIRATION_MS = 86400000; // 1 día
 
     private Key getSigningKey() {
