@@ -42,10 +42,25 @@ public class ProductService {
     }
 
     public boolean deleteProduct(String id) {
-        if (productRepository.existsById(id)) {
+        System.out.println("=== DELETE PRODUCT ===");
+        System.out.println("ID recibido: " + id);
+        System.out.println("Longitud del ID: " + id.length());
+        
+        boolean exists = productRepository.existsById(id);
+        System.out.println("¿Existe el producto? " + exists);
+        
+        if (exists) {
             productRepository.deleteById(id);
+            System.out.println("Producto eliminado exitosamente");
             return true;
         }
+        
+        System.out.println("Producto NO encontrado - listando todos los productos:");
+        List<Product> allProducts = productRepository.findAll();
+        for (Product p : allProducts) {
+            System.out.println("  - ID: " + p.getId() + " | Nombre: " + p.getName());
+        }
+        
         return false;
     }
 }
