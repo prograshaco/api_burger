@@ -26,6 +26,13 @@ public class ProductService {
     }
 
     public Product updateProduct(String id, Product productDetails) {
+        System.out.println("=== UPDATE PRODUCT ===");
+        System.out.println("ID: " + id);
+        System.out.println("Name: " + productDetails.getName());
+        System.out.println("Price: " + productDetails.getPrice());
+        System.out.println("Available: " + productDetails.getAvailable());
+        System.out.println("IsSpecialty: " + productDetails.getIsSpecialty());
+        
         Optional<Product> existingProduct = productRepository.findById(id);
         if (existingProduct.isPresent()) {
             Product product = existingProduct.get();
@@ -34,10 +41,17 @@ public class ProductService {
             product.setPrice(productDetails.getPrice());
             product.setCategory(productDetails.getCategory());
             product.setImageUrl(productDetails.getImageUrl());
-            product.setAvailable(productDetails.getAvailable());
-            product.setIsSpecialty(productDetails.getIsSpecialty());
-            return productRepository.save(product);
+            
+            // Validar y establecer valores por defecto si son null
+            product.setAvailable(productDetails.getAvailable() != null ? productDetails.getAvailable() : 1);
+            product.setIsSpecialty(productDetails.getIsSpecialty() != null ? productDetails.getIsSpecialty() : 0);
+            
+            System.out.println("Guardando producto actualizado...");
+            Product saved = productRepository.save(product);
+            System.out.println("Producto guardado exitosamente");
+            return saved;
         }
+        System.out.println("Producto no encontrado");
         return null;
     }
 
