@@ -28,18 +28,11 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Sin
-                                                                                                              // estado
-                                                                                                              // (JWT)
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll() // Login público
-                        .requestMatchers("/api/users/**").permitAll() // Opcional: mantener público o asegurar
-                        .requestMatchers("/api/products/**").permitAll() // Opcional: mantener público o asegurar
+                        .requestMatchers("/api/**").permitAll() // Todos los endpoints públicos
                         .requestMatchers("/swagger-ui/**", "/api-docs/**").permitAll()
-                        .anyRequest().authenticated());
-
-        // Agregar filtro JWT antes del filtro de autenticación estándar
-        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                        .anyRequest().permitAll());
 
         return http.build();
     }

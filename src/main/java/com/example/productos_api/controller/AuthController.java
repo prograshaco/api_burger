@@ -24,15 +24,9 @@ import java.util.Map;
 public class AuthController {
 
     @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private JwtTokenProvider tokenProvider;
-
-    @Autowired
     private com.example.productos_api.repository.UserRepository userRepository;
 
-    @Operation(summary = "Iniciar sesión", description = "Autentica al usuario y retorna un token JWT")
+    @Operation(summary = "Iniciar sesión", description = "Autentica al usuario y retorna un token simple")
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
 
@@ -44,18 +38,13 @@ public class AuthController {
             return ResponseEntity.status(401).body(Map.of("error", "Credenciales inválidas"));
         }
 
-        // Crear autenticación sin usar AuthenticationManager
-        Authentication authentication = new UsernamePasswordAuthenticationToken(
-                user.getUsername(), 
-                null, 
-                java.util.Collections.singletonList(new org.springframework.security.core.authority.SimpleGrantedAuthority("ROLE_" + user.getRole().toUpperCase())));
+        // Generar un token simple (username:timestamp)
+        String simpleToken = user.getUsername() + ":" + System.currentTimeMillis();
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = tokenProvider.generateToken(authentication);
-
-        Map<String, String> response = new HashMap<>();
-        response.put("accessToken", jwt);
-        response.put("tokenType", "Bearer");
+        Map<String, Object> response = new HashMap<>();
+        response.put("accessToken", simpleToken);
+        response.put("tokenType", "Simple");
+        response.put("user", user);
 
         return ResponseEntity.ok(response);
     }
