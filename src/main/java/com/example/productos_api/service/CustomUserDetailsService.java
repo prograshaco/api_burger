@@ -36,8 +36,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         return new org.springframework.security.core.userdetails.User(
                 user.getUsername(),
-                user.getPassword(), // Spring Security espera que esto esté codificado, o prefijado con {noop} si es
-                                    // texto plano
+                user.getPassword(),
                 Collections.singletonList(new SimpleGrantedAuthority(role)));
     }
 }

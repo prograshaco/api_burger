@@ -29,14 +29,26 @@ public class AuthController {
     @Autowired
     private JwtTokenProvider tokenProvider;
 
+    @Autowired
+    private com.example.productos_api.repository.UserRepository userRepository;
+
     @Operation(summary = "Iniciar sesión", description = "Autentica al usuario y retorna un token JWT")
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
 
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.getUsername(),
-                        loginRequest.getPassword()));
+        // Validar credenciales manualmente
+        com.example.productos_api.model.User user = userRepository.findByUsername(loginRequest.getUsername())
+                .orElse(null);
+        
+        if (user == null || !user.getPassword().equals(loginRequest.getPassword())) {
+            return ResponseEntity.status(401).body(Map.of("error", "Credenciales inválidas"));
+        }
+
+        // Crear autenticación sin usar AuthenticationManager
+        Authentication authentication = new UsernamePasswordAuthenticationToken(
+                user.getUsername(), 
+                null, 
+                java.util.Collections.singletonList(new org.springframework.security.core.authority.SimpleGrantedAuthority("ROLE_" + user.getRole().toUpperCase())));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = tokenProvider.generateToken(authentication);
