@@ -1,7 +1,7 @@
 package com.example.productos_api.controller;
 
 import com.example.productos_api.model.User;
-import com.example.productos_api.repository.UserReporsitory;
+import com.example.productos_api.repository.UserRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -21,7 +21,7 @@ import java.util.Optional;
 public class UserController {
 
     @Autowired
-    private UserReporsitory userRepository;
+    private UserRepository userRepository;
 
     @Operation(summary = "Obtener todos los usuarios", description = "Retorna una lista de todos los usuarios registrados")
     @ApiResponse(responseCode = "200", description = "Lista de usuarios encontrada")

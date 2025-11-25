@@ -12,7 +12,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public class UserReporsitory {
+public class UserRepository {
 
     @Autowired
     private TursoClient tursoClient;
