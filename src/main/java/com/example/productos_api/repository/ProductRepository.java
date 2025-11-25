@@ -52,17 +52,36 @@ public class ProductRepository {
 
         if (exists) {
             String sql = "UPDATE products SET name = ?, description = ?, price = ?, category = ?, image_url = ?, available = ?, is_specialty = ?, updated_at = ? WHERE id = ?";
-            tursoClient.executeQuery(sql, List.of(
-                    product.getName(),
-                    product.getDescription(),
-                    product.getPrice(),
-                    product.getCategory(),
-                    product.getImageUrl(),
-                    product.getAvailable(),
-                    product.getIsSpecialty(),
-                    LocalDateTime.now().format(formatter),
-                    product.getId()
-            ));
+            try {
+                System.out.println("=== EXECUTING UPDATE ===");
+                System.out.println("SQL: " + sql);
+                System.out.println("Values:");
+                System.out.println("  name: " + product.getName());
+                System.out.println("  description: " + product.getDescription());
+                System.out.println("  price: " + product.getPrice());
+                System.out.println("  category: " + product.getCategory());
+                System.out.println("  imageUrl: " + product.getImageUrl());
+                System.out.println("  available: " + product.getAvailable());
+                System.out.println("  isSpecialty: " + product.getIsSpecialty());
+                System.out.println("  id: " + product.getId());
+                
+                tursoClient.executeQuery(sql, List.of(
+                        product.getName(),
+                        product.getDescription() != null ? product.getDescription() : "",
+                        product.getPrice(),
+                        product.getCategory(),
+                        product.getImageUrl() != null ? product.getImageUrl() : "",
+                        product.getAvailable() != null ? product.getAvailable() : 1,
+                        product.getIsSpecialty() != null ? product.getIsSpecialty() : 0,
+                        LocalDateTime.now().format(formatter),
+                        product.getId()
+                ));
+                System.out.println("UPDATE ejecutado exitosamente");
+            } catch (Exception e) {
+                System.err.println("ERROR en UPDATE: " + e.getMessage());
+                e.printStackTrace();
+                throw new RuntimeException("Error updating product: " + e.getMessage(), e);
+            }
         } else {
             String sql = "INSERT INTO products (id, name, description, price, category, image_url, available, is_specialty, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             LocalDateTime now = LocalDateTime.now();
