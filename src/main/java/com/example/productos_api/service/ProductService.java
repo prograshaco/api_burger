@@ -26,33 +26,51 @@ public class ProductService {
     }
 
     public Product updateProduct(String id, Product productDetails) {
-        System.out.println("=== UPDATE PRODUCT ===");
-        System.out.println("ID: " + id);
-        System.out.println("Name: " + productDetails.getName());
-        System.out.println("Price: " + productDetails.getPrice());
-        System.out.println("Available: " + productDetails.getAvailable());
-        System.out.println("IsSpecialty: " + productDetails.getIsSpecialty());
-        
-        Optional<Product> existingProduct = productRepository.findById(id);
-        if (existingProduct.isPresent()) {
-            Product product = existingProduct.get();
-            product.setName(productDetails.getName());
-            product.setDescription(productDetails.getDescription());
-            product.setPrice(productDetails.getPrice());
-            product.setCategory(productDetails.getCategory());
-            product.setImageUrl(productDetails.getImageUrl());
+        try {
+            System.out.println("=== UPDATE PRODUCT ===");
+            System.out.println("ID: " + id);
+            System.out.println("Name: " + productDetails.getName());
+            System.out.println("Price: " + productDetails.getPrice());
+            System.out.println("Available: " + productDetails.getAvailable());
+            System.out.println("IsSpecialty: " + productDetails.getIsSpecialty());
             
-            // Validar y establecer valores por defecto si son null
-            product.setAvailable(productDetails.getAvailable() != null ? productDetails.getAvailable() : 1);
-            product.setIsSpecialty(productDetails.getIsSpecialty() != null ? productDetails.getIsSpecialty() : 0);
-            
-            System.out.println("Guardando producto actualizado...");
-            Product saved = productRepository.save(product);
-            System.out.println("Producto guardado exitosamente");
-            return saved;
+            Optional<Product> existingProduct = productRepository.findById(id);
+            if (existingProduct.isPresent()) {
+                Product product = existingProduct.get();
+                
+                // Solo actualizar campos que no sean null
+                if (productDetails.getName() != null) {
+                    product.setName(productDetails.getName());
+                }
+                if (productDetails.getDescription() != null) {
+                    product.setDescription(productDetails.getDescription());
+                }
+                if (productDetails.getPrice() != null) {
+                    product.setPrice(productDetails.getPrice());
+                }
+                if (productDetails.getCategory() != null) {
+                    product.setCategory(productDetails.getCategory());
+                }
+                if (productDetails.getImageUrl() != null) {
+                    product.setImageUrl(productDetails.getImageUrl());
+                }
+                
+                // Validar y establecer valores por defecto si son null
+                product.setAvailable(productDetails.getAvailable() != null ? productDetails.getAvailable() : product.getAvailable());
+                product.setIsSpecialty(productDetails.getIsSpecialty() != null ? productDetails.getIsSpecialty() : product.getIsSpecialty());
+                
+                System.out.println("Guardando producto actualizado...");
+                Product saved = productRepository.save(product);
+                System.out.println("Producto guardado exitosamente");
+                return saved;
+            }
+            System.out.println("Producto no encontrado");
+            return null;
+        } catch (Exception e) {
+            System.err.println("ERROR en updateProduct: " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("Error updating product: " + e.getMessage(), e);
         }
-        System.out.println("Producto no encontrado");
-        return null;
     }
 
     public boolean deleteProduct(String id) {
